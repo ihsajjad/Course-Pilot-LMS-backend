@@ -80,3 +80,16 @@ export const handleLogin = async (req: Request, res: Response) => {
       .json({ success: false, message: "Internal server error" });
   }
 };
+
+// user logout
+export const logoutUser = async (req: Request, res: Response) => {
+  try {
+    // remove the token from client's browser
+    res
+      .cookie("auth_token", "", { expires: new Date(0) })
+      .json({ message: "User logged out successfull" });
+  } catch (error) {
+    console.log(__filename, error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
