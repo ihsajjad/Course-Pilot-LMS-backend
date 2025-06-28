@@ -1,4 +1,4 @@
-
+import { Document } from "mongoose";
 
 export type LectureProgressType = {
   lectureId: string;
@@ -16,8 +16,8 @@ export type EnrolledCourseType = {
   progress: CourseProgressType;
 };
 
-export type UserType = {
-  id: string;
+export interface UserType extends Document {
+  _id: string;
   name: string;
   email: string;
   password: string; // hashed
@@ -26,7 +26,7 @@ export type UserType = {
   enrolledCourses: EnrolledCourseType[];
   createdAt: string;
   updatedAt: string;
-};
+}
 
 // types/lecture.ts
 
@@ -46,15 +46,15 @@ export type LectureType = {
 
 export type ModuleType = {
   id: string;
-  title: string;           // e.g. "Module 1: Introduction"
+  title: string; // e.g. "Module 1: Introduction"
   lectures: LectureType[];
 };
 
 export type CourseContentType = {
   courseId: string;
-  title: string;           // Course title
-  description: string;     // Full course description
-  price: number;           // e.g. 499.00
-  thumbnail: string;       // Cloudinary image URL
+  title: string; // Course title
+  description: string; // Full course description
+  price: number; // e.g. 499.00
+  thumbnail: string; // Cloudinary image URL
   modules: ModuleType[];
 };

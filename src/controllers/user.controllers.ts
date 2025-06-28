@@ -2,8 +2,9 @@ import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import UserModel from "../models/user.schema";
 import { UserType } from "../types/types";
+import { generateJWTToken } from "../lib/utils";
 
-export const register = async (req: Request, res: Response) => {
+export const handleRegister = async (req: Request, res: Response) => {
   try {
     const user = req.body as UserType;
 
@@ -16,15 +17,24 @@ export const register = async (req: Request, res: Response) => {
     const isAlreadyExist = await UserModel.findOne({ email: user.email });
 
     if (isAlreadyExist) {
-      console.log(isAlreadyExist);
       return res.json({ success: false, message: "User already exist!" });
     }
 
     const newUser = new UserModel(user);
     await newUser.save();
 
+    // built-in utils function to generate token
+    const token = generateJWTToken(newUser._id, user.role);
+
+    res.cookie("auth_token", token, {
+      httpOnly: true,
+      expires: new Date(86400000),
+    });
+
+    newUser.password = "";
     return res.status(201).json(newUser);
   } catch (error: any) {
+    console.log(__dirname, error.message);
     return res
       .status(500)
       .json({ success: false, message: "Internal server error" });

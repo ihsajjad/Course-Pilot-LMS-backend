@@ -1,4 +1,4 @@
-/**
+/*
  * Title: Course Pilot LMS Project - Index File
  * Description: This file serves as the entry point for the Node.js Express application. It initializes the server and sets up routing and middleware.
  * Project Name : Course Pilot LMS
@@ -11,13 +11,16 @@ import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 const app = express();
+import cookieParser from "cookie-parser";
 
 /* ROUTE IMPORTS */
 import userRoutes from "./routes/user.routes";
 
 /* CONFIGURATIONS */
 dotenv.config();
-app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(cors({credentials: true}));
 app.use(express.json());
 
 /* MONGOOSE CONNECTION */
