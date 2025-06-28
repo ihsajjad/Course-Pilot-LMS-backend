@@ -5,6 +5,7 @@ import {
   LectureProgressType,
   UserType,
 } from "../types/user.types";
+import bcrypt from 'bcrypt';
 
 const LectureProgressSchema = new Schema<LectureProgressType>(
   {
@@ -42,6 +43,15 @@ const UserSchema = new Schema<UserType>(
   },
   { timestamps: true }
 );
+
+// hashing the password before storing to the database
+UserSchema.pre("save", async function (next) {
+  if (this.isModified("password")) {
+    this.password = await bcrypt.hash(this.password, 8);
+  }
+  next();
+});
+
 
 const UserModel = mongoose.model<UserType>("User", UserSchema);
 

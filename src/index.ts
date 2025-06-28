@@ -13,6 +13,7 @@ import dotenv from "dotenv";
 const app = express();
 
 /* ROUTE IMPORTS */
+import userRoutes from "./routes/user.routes";
 
 /* CONFIGURATIONS */
 dotenv.config();
@@ -28,6 +29,9 @@ mongoose
   );
 
 /* ROUTES */
+app.use("/api/user", userRoutes);
+
+
 app.get("/", (req: Request, res: Response) => {
   res.send("Server is running...");
 });
