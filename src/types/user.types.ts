@@ -12,7 +12,7 @@ export type CourseProgressType = {
 
 export type EnrolledCourseType = {
   courseId: string;
-  enrolledAt: string; // ISO date string
+  enrolledAt: Date; // ISO date string
   progress: CourseProgressType;
 };
 
