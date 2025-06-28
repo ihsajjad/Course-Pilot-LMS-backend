@@ -1,12 +1,17 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import UserModel from "../models/user.schema";
-import { UserType } from "../types/user.types";
+import { UserType } from "../types/types";
 
 export const register = async (req: Request, res: Response) => {
   try {
     const user = req.body as UserType;
-   
+
+    // validate user data
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json(errors.array());
+    }
 
     const isAlreadyExist = await UserModel.findOne({ email: user.email });
 

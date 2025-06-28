@@ -1,11 +1,11 @@
+import bcrypt from 'bcrypt';
 import mongoose, { Schema } from "mongoose";
 import {
-  CourseProgressType,
-  EnrolledCourseType,
-  LectureProgressType,
-  UserType,
-} from "../types/user.types";
-import bcrypt from 'bcrypt';
+    CourseProgressType,
+    EnrolledCourseType,
+    LectureProgressType,
+    UserType,
+} from "../types/types";
 
 const LectureProgressSchema = new Schema<LectureProgressType>(
   {
