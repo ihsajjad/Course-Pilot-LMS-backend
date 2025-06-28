@@ -3,6 +3,7 @@ import { validationResult } from "express-validator";
 import UserModel from "../models/user.schema";
 import { UserType } from "../types/types";
 import { generateJWTToken } from "../lib/utils";
+import bcrypt from "bcrypt";
 
 export const handleRegister = async (req: Request, res: Response) => {
   try {
@@ -33,6 +34,45 @@ export const handleRegister = async (req: Request, res: Response) => {
 
     newUser.password = "";
     return res.status(201).json(newUser);
+  } catch (error: any) {
+    console.log(__dirname, error.message);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const handleLogin = async (req: Request, res: Response) => {
+  try {
+    const loginData = req.body;
+
+    // validate user data
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json(errors.array());
+    }
+
+    const user = await UserModel.findOne({ email: loginData.email });
+    if (!user) return res.status(400).json({ message: "User doesn't exist" });
+
+    const isMatchedPassword = await bcrypt.compare(
+      loginData.password,
+      user.password
+    );
+
+    if (!isMatchedPassword)
+      return res.status(400).json({ message: "Invalid password" });
+
+    // built-in utils function to generate token
+    const token = generateJWTToken(user?._id.toString(), user.role);
+
+    // setting token to the browser cookie for authentication
+    res.cookie("auth_token", token, {
+      httpOnly: true,
+      expires: new Date(86400000),
+    });
+
+    res.json({ message: "User login successfull" });
   } catch (error: any) {
     console.log(__dirname, error.message);
     return res

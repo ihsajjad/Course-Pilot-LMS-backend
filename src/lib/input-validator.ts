@@ -10,3 +10,13 @@ export const validateRegisterData = () => {
       .withMessage("Password must be at least 6 characters"),
   ];
 };
+
+export const validateLoginData = () => {
+  return [
+    check("email", "Email is required!").isEmail(),
+    check("password")
+      .trim()
+      .isLength({ min: 6 })
+      .withMessage("Password must be at least 6 characters"),
+  ];
+};
