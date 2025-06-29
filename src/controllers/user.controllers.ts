@@ -4,6 +4,7 @@ import { validationResult } from "express-validator";
 import { generateJWTToken, uploadImage } from "../lib/utils";
 import UserModel from "../models/user.schema";
 import { UserType } from "../types/types";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 export const handleRegister = async (req: Request, res: Response) => {
   try {
@@ -37,7 +38,7 @@ export const handleRegister = async (req: Request, res: Response) => {
     await newUser.save();
 
     // built-in utils function to generate token
-    const token = generateJWTToken(newUser._id, user.role);
+    const token = generateJWTToken(newUser);
 
     res.cookie("auth_token", token, {
       httpOnly: true,
@@ -45,7 +46,11 @@ export const handleRegister = async (req: Request, res: Response) => {
     });
 
     newUser.password = "";
-    return res.status(201).json(newUser);
+    return res.status(201).json({
+      success: true,
+      message: "Registration successful",
+      data: newUser,
+    });
   } catch (error: any) {
     console.log(__dirname, error.message);
     return res
@@ -54,6 +59,7 @@ export const handleRegister = async (req: Request, res: Response) => {
   }
 };
 
+// user login
 export const handleLogin = async (req: Request, res: Response) => {
   try {
     const loginData = req.body;
@@ -73,10 +79,12 @@ export const handleLogin = async (req: Request, res: Response) => {
     );
 
     if (!isMatchedPassword)
-      return res.status(400).json({ message: "Invalid password" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Password doesn't match!" });
 
     // built-in utils function to generate token
-    const token = generateJWTToken(user?._id.toString(), user.role);
+    const token = generateJWTToken(user);
 
     // setting token to the browser cookie for authentication
     res.cookie("auth_token", token, {
@@ -84,7 +92,7 @@ export const handleLogin = async (req: Request, res: Response) => {
       expires: new Date(86400000),
     });
 
-    res.json({ message: "User login successfull" });
+    res.json({ success: true, message: "User login successful" });
   } catch (error: any) {
     console.log(__dirname, error.message);
     return res
@@ -100,6 +108,40 @@ export const logoutUser = async (req: Request, res: Response) => {
     res
       .cookie("auth_token", "", { expires: new Date(0) })
       .json({ message: "User logged out successfull" });
+  } catch (error) {
+    console.log(__filename, error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// get current user (To observe the logged user)
+export const currentUser = async (req: Request, res: Response) => {
+  try {
+    let userData = {
+      email: "",
+      name: "",
+      role: "",
+      profile: "",
+      enrolledCourses: [],
+      _id: "",
+    };
+
+    // remove the token from client's browser
+    const token = req.cookies["auth_token"];
+    if (!token) return res.json(userData);
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY as string);
+
+    if (decoded) {
+      userData.name = await (decoded as JwtPayload).name;
+      userData.email = await (decoded as JwtPayload).email;
+      userData.role = await (decoded as JwtPayload).role;
+      userData.profile = await (decoded as JwtPayload).profile;
+      userData.enrolledCourses = await (decoded as JwtPayload).enrolledCourses;
+      userData._id = await (decoded as JwtPayload)._id;
+    }
+
+    res.json(userData);
   } catch (error) {
     console.log(__filename, error);
     res.status(500).json({ message: "Internal server error" });

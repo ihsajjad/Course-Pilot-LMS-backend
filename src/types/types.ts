@@ -13,7 +13,6 @@ export type CourseProgressType = {
 export type EnrolledCourseType = {
   courseId: string;
   enrolledAt: Date; // ISO date string
-  progress: CourseProgressType;
 };
 
 export interface UserType extends Document {
@@ -24,6 +23,7 @@ export interface UserType extends Document {
   profile?: string; // Cloudinary URL or optional fallback
   role: "Admin" | "User";
   enrolledCourses: EnrolledCourseType[];
+  progress: CourseProgressType[];
   createdAt: string;
   updatedAt: string;
 }

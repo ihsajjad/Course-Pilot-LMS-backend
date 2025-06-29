@@ -1,5 +1,6 @@
 import express from "express";
 import {
+    currentUser,
   handleLogin,
   handleRegister,
   logoutUser,
@@ -18,7 +19,9 @@ router.post(
   validateRegisterData(),
   handleRegister
 );
+
 router.post("/login", validateLoginData(), handleLogin);
 router.get("/logout", logoutUser);
+router.get("/current", currentUser);
 
 export default router;

@@ -27,7 +27,6 @@ const EnrolledCourseSchema = new Schema<EnrolledCourseType>(
   {
     courseId: { type: String, required: true },
     enrolledAt: { type: Date, default: Date.now },
-    progress: { type: CourseProgressSchema, required: true },
   },
   { _id: false }
 );
@@ -40,6 +39,7 @@ const UserSchema = new Schema<UserType>(
     profile: { type: String },
     role: { type: String, enum: ["Admin", "User"], default: "User" },
     enrolledCourses: { type: [EnrolledCourseSchema], default: [] },
+    progress: [{ type: CourseProgressSchema, required: true }],
   },
   { timestamps: true }
 );

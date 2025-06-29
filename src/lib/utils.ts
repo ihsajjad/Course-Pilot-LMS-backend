@@ -1,10 +1,12 @@
 import jwt from "jsonwebtoken";
 import multer from "multer";
 import cloudinary from "cloudinary";
+import { UserType } from "../types/types";
 
-export const generateJWTToken = (userId: string, userRole: string) => {
+export const generateJWTToken = (user: UserType) => {
+  const { email, role, name, profile, enrolledCourses, _id } = user;
   const token = jwt.sign(
-    { userId, userRole },
+    { email, role, name, profile, enrolledCourses, _id },
     process.env.JWT_SECRET_KEY as string,
     {
       expiresIn: "1d",
