@@ -21,7 +21,7 @@ export interface UserType extends Document {
   name: string;
   email: string;
   password: string; // hashed
-  avatar?: string; // Cloudinary URL or optional fallback
+  profile?: string; // Cloudinary URL or optional fallback
   role: "Admin" | "User";
   enrolledCourses: EnrolledCourseType[];
   createdAt: string;

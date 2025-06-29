@@ -12,6 +12,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 const app = express();
 import cookieParser from "cookie-parser";
+import { v2 as cloudinary } from "cloudinary";
 
 /* ROUTE IMPORTS */
 import userRoutes from "./routes/user.routes";
@@ -20,7 +21,7 @@ import userRoutes from "./routes/user.routes";
 dotenv.config();
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors({credentials: true}));
+app.use(cors({ credentials: true }));
 app.use(express.json());
 
 /* MONGOOSE CONNECTION */
@@ -31,9 +32,15 @@ mongoose
     console.error(`${process.env.DB_NAME} connection error:`, err)
   );
 
+/* CLOUDINARY CONNECTION*/
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET_KEY,
+});
+
 /* ROUTES */
 app.use("/api/user", userRoutes);
-
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Server is running...");

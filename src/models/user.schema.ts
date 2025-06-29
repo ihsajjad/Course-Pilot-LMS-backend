@@ -1,10 +1,10 @@
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 import mongoose, { Schema } from "mongoose";
 import {
-    CourseProgressType,
-    EnrolledCourseType,
-    LectureProgressType,
-    UserType,
+  CourseProgressType,
+  EnrolledCourseType,
+  LectureProgressType,
+  UserType,
 } from "../types/types";
 
 const LectureProgressSchema = new Schema<LectureProgressType>(
@@ -37,7 +37,7 @@ const UserSchema = new Schema<UserType>(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    avatar: { type: String },
+    profile: { type: String },
     role: { type: String, enum: ["Admin", "User"], default: "User" },
     enrolledCourses: { type: [EnrolledCourseSchema], default: [] },
   },
@@ -51,7 +51,6 @@ UserSchema.pre("save", async function (next) {
   }
   next();
 });
-
 
 const UserModel = mongoose.model<UserType>("User", UserSchema);
 

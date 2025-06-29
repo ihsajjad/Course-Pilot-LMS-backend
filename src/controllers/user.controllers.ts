@@ -1,9 +1,9 @@
+import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
+import { generateJWTToken, uploadImage } from "../lib/utils";
 import UserModel from "../models/user.schema";
 import { UserType } from "../types/types";
-import { generateJWTToken } from "../lib/utils";
-import bcrypt from "bcrypt";
 
 export const handleRegister = async (req: Request, res: Response) => {
   try {
@@ -15,8 +15,20 @@ export const handleRegister = async (req: Request, res: Response) => {
       return res.status(400).json(errors.array());
     }
 
-    const isAlreadyExist = await UserModel.findOne({ email: user.email });
+    // cheking the profile exist or not
+    const file = req.file as Express.Multer.File;
+    if (!file) {
+      return res.json({
+        success: false,
+        message: "Profile picture is required",
+      });
+    }
 
+    // uploading the profile to the cloudinary and getting the link
+    const file_url = await uploadImage(file);
+    user.profile = file_url;
+
+    const isAlreadyExist = await UserModel.findOne({ email: user.email });
     if (isAlreadyExist) {
       return res.json({ success: false, message: "User already exist!" });
     }
