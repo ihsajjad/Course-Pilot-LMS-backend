@@ -22,7 +22,7 @@ const ModuleSchema = new Schema({
 });
 
 // CourseContent Schema
-const CourseContentSchema = new Schema(
+const CourseSchema = new Schema(
   {
     title: { type: String, required: true },
     description: { type: String, required: true },
@@ -35,6 +35,6 @@ const CourseContentSchema = new Schema(
   }
 );
 
-const CourseModel = mongoose.model("Course", CourseContentSchema);
+const CourseModel = mongoose.model("Course", CourseSchema);
 
 export default CourseModel;

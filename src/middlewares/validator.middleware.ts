@@ -20,3 +20,11 @@ export const validateLoginData = () => {
       .withMessage("Password must be at least 6 characters"),
   ];
 };
+
+export const validateCreateCourseData = () => {
+  return [
+    check("title", "Title is required!").isString(),
+    check("price", "Price is required!").isNumeric().isLength({ min: 0 }),
+    check("description", "Description is required!").isString(),
+  ];
+};

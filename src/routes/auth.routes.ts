@@ -8,7 +8,7 @@ import {
 import {
   validateLoginData,
   validateRegisterData,
-} from "../lib/input-validator";
+} from "../middlewares/validator.middleware";
 import { upload } from "../lib/utils";
 
 const router = express.Router();

@@ -15,7 +15,8 @@ import cookieParser from "cookie-parser";
 import { v2 as cloudinary } from "cloudinary";
 
 /* ROUTE IMPORTS */
-import userRoutes from "./routes/auth.routes";
+import authRoutes from "./routes/auth.routes";
+import courseRoutes from "./routes/course.routes";
 
 /* CONFIGURATIONS */
 dotenv.config();
@@ -40,7 +41,8 @@ cloudinary.config({
 });
 
 /* ROUTES */
-app.use("/api/auth", userRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/courses", courseRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Server is running...");
