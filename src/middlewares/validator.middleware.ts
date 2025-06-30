@@ -21,7 +21,7 @@ export const validateLoginData = () => {
   ];
 };
 
-export const validateCreateCourseData = () => {
+export const validateCourseData = () => {
   return [
     check("title", "Title is required!").isString(),
     check("price", "Price is required!").isNumeric().isLength({ min: 0 }),

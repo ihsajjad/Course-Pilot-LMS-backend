@@ -1,15 +1,28 @@
 import express from "express";
-import { handleCreteCourse } from "../controllers/course.routes";
+import {
+    creteCourse,
+    getCourses,
+    updateCourse,
+} from "../controllers/course.routes";
 import { upload } from "../lib/utils";
-import { validateCreateCourseData } from "../middlewares/validator.middleware";
+import { validateCourseData } from "../middlewares/validator.middleware";
 
 const router = express.Router();
 
 router.post(
   "/create",
   upload.single("thumbnail"),
-  validateCreateCourseData(),
-  handleCreteCourse
+  validateCourseData(),
+  creteCourse
+);
+
+router.get("/", getCourses);
+
+router.put(
+  "/update",
+  upload.single("newThumbnail"),
+  validateCourseData(),
+  updateCourse
 );
 
 export default router;

@@ -50,7 +50,7 @@ export type ModuleType = {
   lectures: LectureType[];
 };
 
-export interface CourseContentType extends Document {
+export interface CourseType extends Document {
   _id: string;
   title: string; // Course title
   description: string; // Full course description
