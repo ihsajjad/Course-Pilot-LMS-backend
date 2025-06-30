@@ -4,7 +4,7 @@ import {
   handleLogin,
   handleRegister,
   logoutUser,
-} from "../controllers/user.controllers";
+} from "../controllers/auth.controllers";
 import {
   validateLoginData,
   validateRegisterData,

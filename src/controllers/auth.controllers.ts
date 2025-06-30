@@ -40,16 +40,19 @@ export const handleRegister = async (req: Request, res: Response) => {
     // built-in utils function to generate token
     const token = generateJWTToken(newUser);
 
+    // setting token to the browser cookie for authentication
     res.cookie("auth_token", token, {
       httpOnly: true,
-      expires: new Date(86400000),
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 86400000,
     });
 
-    newUser.password = "";
+    const { name, email, profile, role, _id, enrolledCourses } = user;
+    const data = { name, email, profile, role, _id, enrolledCourses };
     return res.status(201).json({
       success: true,
       message: "Registration successful",
-      data: newUser,
+      data,
     });
   } catch (error: any) {
     console.log(__dirname, error.message);
@@ -89,10 +92,14 @@ export const handleLogin = async (req: Request, res: Response) => {
     // setting token to the browser cookie for authentication
     res.cookie("auth_token", token, {
       httpOnly: true,
-      expires: new Date(86400000),
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 86400000,
     });
 
-    res.json({ success: true, message: "User login successful" });
+    const { name, email, profile, role, _id, enrolledCourses } = user;
+    const data = { name, email, profile, role, _id, enrolledCourses };
+
+    res.json({ success: true, message: "User login successful", data });
   } catch (error: any) {
     console.log(__dirname, error.message);
     return res
@@ -136,7 +143,7 @@ export const currentUser = async (req: Request, res: Response) => {
       userData.name = await (decoded as JwtPayload).name;
       userData.email = await (decoded as JwtPayload).email;
       userData.role = await (decoded as JwtPayload).role;
-      userData.profile = await (decoded as JwtPayload).profile;
+      userData.profile = (await (decoded as JwtPayload).profile) || "";
       userData.enrolledCourses = await (decoded as JwtPayload).enrolledCourses;
       userData._id = await (decoded as JwtPayload)._id;
     }
