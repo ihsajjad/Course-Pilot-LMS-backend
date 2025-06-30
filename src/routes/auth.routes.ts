@@ -21,7 +21,7 @@ router.post(
 );
 
 router.post("/login", validateLoginData(), handleLogin);
-router.get("/logout", logoutUser);
+router.post("/logout", logoutUser);
 router.get("/current", currentUser);
 
 export default router;

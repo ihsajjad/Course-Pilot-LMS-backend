@@ -50,11 +50,11 @@ export type ModuleType = {
   lectures: LectureType[];
 };
 
-export type CourseContentType = {
-  courseId: string;
+export interface CourseContentType extends Document {
+  _id: string;
   title: string; // Course title
   description: string; // Full course description
   price: number; // e.g. 499.00
   thumbnail: string; // Cloudinary image URL
   modules: ModuleType[];
-};
+}

@@ -25,14 +25,14 @@ export const handleRegister = async (req: Request, res: Response) => {
       });
     }
 
-    // uploading the profile to the cloudinary and getting the link
-    const file_url = await uploadImage(file);
-    user.profile = file_url;
-
     const isAlreadyExist = await UserModel.findOne({ email: user.email });
     if (isAlreadyExist) {
       return res.json({ success: false, message: "User already exist!" });
     }
+
+    // uploading the profile to the cloudinary and getting the link
+    const file_url = await uploadImage(file);
+    user.profile = file_url;
 
     const newUser = new UserModel(user);
     await newUser.save();
@@ -55,7 +55,7 @@ export const handleRegister = async (req: Request, res: Response) => {
       data,
     });
   } catch (error: any) {
-    console.log(__dirname, error.message);
+    console.log(__dirname, error);
     return res
       .status(500)
       .json({ success: false, message: "Internal server error" });
@@ -114,7 +114,7 @@ export const logoutUser = async (req: Request, res: Response) => {
     // remove the token from client's browser
     res
       .cookie("auth_token", "", { expires: new Date(0) })
-      .json({ message: "User logged out successfull" });
+      .json({ success: true, message: "Sign out successful" });
   } catch (error) {
     console.log(__filename, error);
     res.status(500).json({ message: "Internal server error" });
