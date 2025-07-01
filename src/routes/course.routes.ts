@@ -1,8 +1,9 @@
 import express from "express";
 import {
-    creteCourse,
-    getCourses,
-    updateCourse,
+  creteCourse,
+  getCourseById,
+  getCourses,
+  updateCourse,
 } from "../controllers/course.routes";
 import { upload } from "../lib/utils";
 import { validateCourseData } from "../middlewares/validator.middleware";
@@ -24,5 +25,7 @@ router.put(
   validateCourseData(),
   updateCourse
 );
+
+router.get("/:_id", getCourseById);
 
 export default router;
