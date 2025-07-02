@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import mongoose, { SortOrder } from "mongoose";
-import { uploadImage } from "../lib/utils";
+import { uploadImage, uploadPDF } from "../lib/utils";
 import CourseModel from "../models/course.model";
 import { CourseType } from "../types/types";
 
@@ -264,12 +264,10 @@ export const deleteModuleById = async (req: Request, res: Response) => {
     const { courseId, moduleId } = req.params;
 
     if (!moduleId || !courseId) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "Course and Module ID  is required!",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "Course and Module ID  is required!",
+      });
     }
 
     const result = await CourseModel.updateOne(
@@ -433,6 +431,28 @@ export const deleteLectureById = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     console.log("deleteLectureById error:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const handlUploadPdf = async (req: Request, res: Response) => {
+  try {
+    const file = req.file;
+
+    if (!file) {
+      return res.status(400).json({
+        success: false,
+        message: "File is required!",
+      });
+    }
+
+    const pdfLink = await uploadPDF(file);
+
+    return res.json(pdfLink);
+  } catch (error: any) {
+    console.log("handlUploadPdf error:", error);
     return res
       .status(500)
       .json({ success: false, message: "Internal server error" });

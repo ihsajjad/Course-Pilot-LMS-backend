@@ -8,6 +8,7 @@ import {
   deleteModuleById,
   getCourseById,
   getCourses,
+  handlUploadPdf,
   updateCourse,
   updateLecture,
   updateModule,
@@ -51,5 +52,8 @@ router.delete("/module/:courseId/:moduleId", deleteModuleById);
 router.post("/lecture", validateCreateLectureData(), createLecture);
 router.put("/lecture", validateUpdateLectureData(), updateLecture);
 router.delete("/lecture/:courseId/:moduleId/:lectureId", deleteLectureById);
+
+// To upload resources pdf
+router.post("/upload-rsource", handlUploadPdf);
 
 export default router;

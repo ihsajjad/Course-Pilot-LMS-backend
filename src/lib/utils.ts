@@ -32,3 +32,16 @@ export async function uploadImage(file: any) {
 
   return fileUrl.secure_url;
 }
+
+// Uploading a single PDF file to Cloudinary
+export async function uploadPDF(file: any) {
+  const b64 = Buffer.from(file.buffer).toString("base64");
+  const dataURI = "data:" + file.mimetype + ";base64," + b64;
+
+  const fileUrl = await cloudinary.v2.uploader.upload(dataURI, {
+    resource_type: "raw", // Required for non-image files like PDFs
+    format: "pdf",
+  });
+
+  return fileUrl.secure_url;
+}
