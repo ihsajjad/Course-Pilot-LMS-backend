@@ -266,7 +266,10 @@ export const deleteModuleById = async (req: Request, res: Response) => {
     if (!moduleId || !courseId) {
       return res
         .status(400)
-        .json({ success: false, message: "Course and Module ID  is required!" });
+        .json({
+          success: false,
+          message: "Course and Module ID  is required!",
+        });
     }
 
     const result = await CourseModel.updateOne(
@@ -388,6 +391,48 @@ export const updateLecture = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     console.log("updateLecture error:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const deleteLectureById = async (req: Request, res: Response) => {
+  try {
+    const { courseId, moduleId, lectureId } = req.params;
+
+    if (!moduleId || !courseId || !lectureId) {
+      return res.status(400).json({
+        success: false,
+        message: "Course, Module, and Lecture ID are required!",
+      });
+    }
+
+    const result = await CourseModel.updateOne(
+      { _id: courseId },
+      {
+        $pull: {
+          "modules.$[mod].lectures": { _id: lectureId },
+        },
+      },
+      {
+        arrayFilters: [{ "mod._id": moduleId }],
+      }
+    );
+
+    if (result.modifiedCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Lecture not found or already deleted",
+      });
+    }
+
+    return res.json({
+      success: true,
+      message: "Lecture deleted successfully",
+    });
+  } catch (error: any) {
+    console.log("deleteLectureById error:", error);
     return res
       .status(500)
       .json({ success: false, message: "Internal server error" });
