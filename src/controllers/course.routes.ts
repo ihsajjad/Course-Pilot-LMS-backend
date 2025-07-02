@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
+import mongoose, { SortOrder } from "mongoose";
 import { uploadImage } from "../lib/utils";
 import CourseModel from "../models/course.model";
-import mongoose, { SortOrder } from "mongoose";
 import { CourseType } from "../types/types";
 
 export const creteCourse = async (req: Request, res: Response) => {
@@ -265,13 +265,66 @@ export const createLecture = async (req: Request, res: Response) => {
         message: "Course or Module not found",
       });
     }
-    
+
     res.json({
       success: true,
       message: "Lecture created successfully",
     });
   } catch (error: any) {
     console.log(__dirname, error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const updateLecture = async (req: Request, res: Response) => {
+  try {
+    const { courseId, moduleId, lectureId, title, videoUrl, resources } =
+      req.body as {
+        courseId: string;
+        moduleId: string;
+        lectureId: string;
+        title: string;
+        videoUrl: string;
+        resources: string[];
+      };
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json(errors.array());
+    }
+
+    const result = await CourseModel.updateOne(
+      { _id: courseId },
+      {
+        $set: {
+          "modules.$[mod].lectures.$[lec].title": title,
+          "modules.$[mod].lectures.$[lec].videoUrl": videoUrl,
+          "modules.$[mod].lectures.$[lec].resources": resources,
+        },
+      },
+      {
+        arrayFilters: [
+          { "mod._id": moduleId },
+          { "lec._id": lectureId },
+        ],
+      }
+    );
+
+    if (result.modifiedCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Lecture not found or already updated",
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Lecture updated successfully",
+    });
+  } catch (error: any) {
+    console.log("updateLecture error:", error);
     return res
       .status(500)
       .json({ success: false, message: "Internal server error" });

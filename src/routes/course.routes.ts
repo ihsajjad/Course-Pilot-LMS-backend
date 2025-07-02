@@ -6,6 +6,7 @@ import {
   getCourseById,
   getCourses,
   updateCourse,
+  updateLecture,
   updateModule,
 } from "../controllers/course.routes";
 import { upload } from "../lib/utils";
@@ -13,6 +14,7 @@ import {
   validateCourseData,
   validateCreateLectureData,
   validateCreateModuleData,
+  validateUpdateLectureData,
   validateUpdateModuleData,
 } from "../middlewares/validator.middleware";
 
@@ -39,5 +41,6 @@ router.get("/:_id", getCourseById);
 router.post("/module", validateCreateModuleData(), createModule);
 router.put("/module", validateUpdateModuleData(), updateModule);
 router.post("/lecture", validateCreateLectureData(), createLecture);
+router.put("/lecture", validateUpdateLectureData(), updateLecture);
 
 export default router;
