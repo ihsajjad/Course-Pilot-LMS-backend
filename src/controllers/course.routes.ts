@@ -231,3 +231,49 @@ export const updateModule = async (req: Request, res: Response) => {
       .json({ success: false, message: "Internal server error" });
   }
 };
+
+export const createLecture = async (req: Request, res: Response) => {
+  try {
+    const { courseId, title, moduleId, videoUrl, resources } = req.body as {
+      courseId: string;
+      title: string;
+      moduleId: string;
+      videoUrl: string;
+      resources: string[];
+    };
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json(errors.array());
+    }
+
+    const newLecture = {
+      _id: new mongoose.Types.ObjectId(),
+      title,
+      videoUrl,
+      resources,
+    };
+
+    const result = await CourseModel.updateOne(
+      { _id: courseId, "modules._id": moduleId },
+      { $push: { "modules.$.lectures": newLecture } }
+    );
+
+    if (result.modifiedCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Course or Module not found",
+      });
+    }
+    
+    res.json({
+      success: true,
+      message: "Lecture created successfully",
+    });
+  } catch (error: any) {
+    console.log(__dirname, error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
