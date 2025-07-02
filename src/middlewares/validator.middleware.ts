@@ -28,3 +28,10 @@ export const validateCourseData = () => {
     check("description", "Description is required!").isString(),
   ];
 };
+
+export const validateModuleData = () => {
+  return [
+    check("title", "Title is required!").isString(),
+    check("courseId", "courseId is required!").isString(),
+  ];
+};

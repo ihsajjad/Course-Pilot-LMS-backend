@@ -1,28 +1,21 @@
 import mongoose, { Schema } from "mongoose";
-
-// LectureResource Schema
-const LectureResourceSchema = new Schema({
-  name: { type: String, required: true },
-  url: { type: String, required: true },
-});
+import { CourseType, LectureType, ModuleType } from "../types/types";
 
 // Lecture Schema
-const LectureSchema = new Schema({
+const LectureSchema = new Schema<LectureType>({
   title: { type: String, required: true },
   videoUrl: { type: String, required: true },
-  resources: [LectureResourceSchema],
-  isLocked: { type: Boolean, default: true },
-  isCompleted: { type: Boolean, default: false },
+  resources: [{ type: String }],
 });
 
 // Module Schema
-const ModuleSchema = new Schema({
+const ModuleSchema = new Schema<ModuleType>({
   title: { type: String, required: true },
   lectures: [LectureSchema],
 });
 
 // CourseContent Schema
-const CourseSchema = new Schema(
+const CourseSchema = new Schema<CourseType>(
   {
     title: { type: String, required: true },
     description: { type: String, required: true },
@@ -35,6 +28,6 @@ const CourseSchema = new Schema(
   }
 );
 
-const CourseModel = mongoose.model("Course", CourseSchema);
+const CourseModel = mongoose.model<CourseType>("Course", CourseSchema);
 
 export default CourseModel;

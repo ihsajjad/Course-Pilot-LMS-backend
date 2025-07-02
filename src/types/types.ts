@@ -1,4 +1,4 @@
-import { Document } from "mongoose";
+import mongoose, { Document, ObjectId } from "mongoose";
 
 export type LectureProgressType = {
   lectureId: string;
@@ -30,22 +30,15 @@ export interface UserType extends Document {
 
 // types/lecture.ts
 
-export type LectureResourceType = {
-  name: string;
-  url: string; // PDF download/view link
-};
-
 export type LectureType = {
-  id: string;
+  _id: string;
   title: string;
-  videoUrl: string; // YouTube embed link or streaming URL
-  resources: LectureResourceType[];
-  isLocked: boolean;
-  isCompleted: boolean;
+  videoUrl: string;
+  resources: string[];
 };
 
 export type ModuleType = {
-  id: string;
+  _id: mongoose.Types.ObjectId;
   title: string; // e.g. "Module 1: Introduction"
   lectures: LectureType[];
 };
