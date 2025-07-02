@@ -159,6 +159,33 @@ export const getCourseById = async (req: Request, res: Response) => {
   }
 };
 
+export const deleteCourseById = async (req: Request, res: Response) => {
+  try {
+    const _id = req.params._id;
+    if (!_id) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Course id is required!" });
+    }
+
+    const course = await CourseModel.findByIdAndDelete(_id);
+    if (!course?.$isDeleted) {
+      return res.json({
+        success: false,
+        message: `Failed to delete the course`,
+      });
+    }
+
+    res.json({ success: true, message: `Course deleted successfully` });
+  } catch (error: any) {
+    console.log(__dirname, error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
+// ================================ Module Controllers =========================================
 export const createModule = async (req: Request, res: Response) => {
   try {
     const { courseId, title } = req.body as { courseId: string; title: string };
@@ -232,6 +259,7 @@ export const updateModule = async (req: Request, res: Response) => {
   }
 };
 
+// ================================ Lecture Controllers =========================================
 export const createLecture = async (req: Request, res: Response) => {
   try {
     const { courseId, title, moduleId, videoUrl, resources } = req.body as {
@@ -305,10 +333,7 @@ export const updateLecture = async (req: Request, res: Response) => {
         },
       },
       {
-        arrayFilters: [
-          { "mod._id": moduleId },
-          { "lec._id": lectureId },
-        ],
+        arrayFilters: [{ "mod._id": moduleId }, { "lec._id": lectureId }],
       }
     );
 

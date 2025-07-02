@@ -3,6 +3,7 @@ import {
   createLecture,
   createModule,
   creteCourse,
+  deleteCourseById,
   getCourseById,
   getCourses,
   updateCourse,
@@ -37,9 +38,13 @@ router.put(
 );
 
 router.get("/:_id", getCourseById);
+router.delete("/:_id", deleteCourseById);
 
+// Module routes
 router.post("/module", validateCreateModuleData(), createModule);
 router.put("/module", validateUpdateModuleData(), updateModule);
+
+// Lecture routes
 router.post("/lecture", validateCreateLectureData(), createLecture);
 router.put("/lecture", validateUpdateLectureData(), updateLecture);
 
