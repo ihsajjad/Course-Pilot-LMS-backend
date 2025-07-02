@@ -39,3 +39,39 @@ export const createModule = async (req: Request, res: Response) => {
       .json({ success: false, message: "Internal server error" });
   }
 };
+
+export const updateModule = async (req: Request, res: Response) => {
+  try {
+    const { courseId, title, moduleId } = req.body as {
+      courseId: string;
+      title: string;
+      moduleId: string;
+    };
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json(errors.array());
+    }
+
+    const updated = await CourseModel.updateOne(
+      { _id: courseId, "modules._id": moduleId },
+      { $set: { "modules.$.title": title } }
+    );
+
+    if (updated.modifiedCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Module or Course not found or already up-to-date.",
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Module updated successfully",
+    });
+  } catch (error: any) {
+    console.log(__dirname, error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};

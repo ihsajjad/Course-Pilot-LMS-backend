@@ -29,7 +29,14 @@ export const validateCourseData = () => {
   ];
 };
 
-export const validateModuleData = () => {
+export const validateCreateModuleData = () => {
+  return [
+    check("title", "Title is required!").isString(),
+    check("courseId", "courseId is required!").isString(),
+  ];
+};
+
+export const validateUpdateModuleData = () => {
   return [
     check("title", "Title is required!").isString(),
     check("courseId", "courseId is required!").isString(),

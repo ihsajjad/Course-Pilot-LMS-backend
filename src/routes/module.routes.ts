@@ -1,9 +1,10 @@
 import express from "express";
-import { createModule } from "../controllers/module.controller";
-import { validateModuleData } from "../middlewares/validator.middleware";
+import { createModule, updateModule } from "../controllers/module.controller";
+import { validateCreateModuleData, validateUpdateModuleData } from "../middlewares/validator.middleware";
 
 const router = express.Router();
 
-router.post("/", validateModuleData(), createModule);
+router.post("/", validateCreateModuleData(), createModule);
+router.put("/", validateUpdateModuleData(), updateModule);
 
 export default router;
