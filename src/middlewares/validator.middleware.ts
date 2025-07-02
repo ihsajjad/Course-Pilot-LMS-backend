@@ -38,7 +38,8 @@ export const validateCreateModuleData = () => {
 
 export const validateUpdateModuleData = () => {
   return [
-    check("title", "Title is required!").isString(),
+    check("title", "title is required!").isString(),
     check("courseId", "courseId is required!").isString(),
+    check("moduleId", "moduleId is required!").isString(),
   ];
 };

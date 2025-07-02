@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { uploadImage } from "../lib/utils";
 import CourseModel from "../models/course.model";
-import { SortOrder } from "mongoose";
+import mongoose, { SortOrder } from "mongoose";
 import { CourseType } from "../types/types";
 
 export const creteCourse = async (req: Request, res: Response) => {
@@ -151,6 +151,79 @@ export const getCourseById = async (req: Request, res: Response) => {
     }
 
     res.json(course);
+  } catch (error: any) {
+    console.log(__dirname, error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const createModule = async (req: Request, res: Response) => {
+  try {
+    const { courseId, title } = req.body as { courseId: string; title: string };
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json(errors.array());
+    }
+
+    const course = await CourseModel.findById(courseId);
+    if (!course) {
+      return res.status(404).json({
+        success: false,
+        message: "Course doesn't exist!",
+      });
+    }
+
+    const module = {
+      _id: new mongoose.Types.ObjectId(),
+      title,
+      lectures: [],
+    };
+
+    course.modules.push(module);
+    await course.save();
+
+    res.json({
+      success: true,
+      message: "Module crated successfully",
+    });
+  } catch (error: any) {
+    console.log(__dirname, error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const updateModule = async (req: Request, res: Response) => {
+  try {
+    const { courseId, title, moduleId } = req.body as {
+      courseId: string;
+      title: string;
+      moduleId: string;
+    };
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json(errors.array());
+    }
+
+    const updated = await CourseModel.updateOne(
+      { _id: courseId, "modules._id": moduleId },
+      { $set: { "modules.$.title": title } }
+    );
+
+    if (updated.modifiedCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Module or Course not found or already up-to-date.",
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Module updated successfully",
+    });
   } catch (error: any) {
     console.log(__dirname, error);
     return res

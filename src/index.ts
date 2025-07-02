@@ -17,7 +17,6 @@ import { v2 as cloudinary } from "cloudinary";
 /* ROUTE IMPORTS */
 import authRoutes from "./routes/auth.routes";
 import courseRoutes from "./routes/course.routes";
-import moduleRoutes from "./routes/module.routes";
 
 /* CONFIGURATIONS */
 dotenv.config();
@@ -44,7 +43,6 @@ cloudinary.config({
 /* ROUTES */
 app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRoutes);
-app.use("/api/modules", moduleRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Server is running...");

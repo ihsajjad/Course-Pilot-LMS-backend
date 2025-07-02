@@ -1,12 +1,18 @@
 import express from "express";
 import {
+  createModule,
   creteCourse,
   getCourseById,
   getCourses,
   updateCourse,
+  updateModule,
 } from "../controllers/course.routes";
 import { upload } from "../lib/utils";
-import { validateCourseData } from "../middlewares/validator.middleware";
+import {
+  validateCourseData,
+  validateCreateModuleData,
+  validateUpdateModuleData,
+} from "../middlewares/validator.middleware";
 
 const router = express.Router();
 
@@ -27,5 +33,8 @@ router.put(
 );
 
 router.get("/:_id", getCourseById);
+
+router.post("/module", validateCreateModuleData(), createModule);
+router.put("/module", validateUpdateModuleData(), updateModule);
 
 export default router;
