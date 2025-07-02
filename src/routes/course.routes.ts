@@ -4,6 +4,7 @@ import {
   createModule,
   creteCourse,
   deleteCourseById,
+  deleteModuleById,
   getCourseById,
   getCourses,
   updateCourse,
@@ -43,6 +44,7 @@ router.delete("/:_id", deleteCourseById);
 // Module routes
 router.post("/module", validateCreateModuleData(), createModule);
 router.put("/module", validateUpdateModuleData(), updateModule);
+router.delete("/module/:courseId/:moduleId", deleteModuleById);
 
 // Lecture routes
 router.post("/lecture", validateCreateLectureData(), createLecture);

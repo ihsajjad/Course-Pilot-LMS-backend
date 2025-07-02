@@ -259,6 +259,44 @@ export const updateModule = async (req: Request, res: Response) => {
   }
 };
 
+export const deleteModuleById = async (req: Request, res: Response) => {
+  try {
+    const { courseId, moduleId } = req.params;
+
+    if (!moduleId || !courseId) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Course and Module ID  is required!" });
+    }
+
+    const result = await CourseModel.updateOne(
+      { _id: courseId },
+      {
+        $pull: {
+          modules: { _id: moduleId },
+        },
+      }
+    );
+
+    if (result.modifiedCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Module not found or already deleted",
+      });
+    }
+
+    return res.json({
+      success: true,
+      message: "Module deleted successfully",
+    });
+  } catch (error: any) {
+    console.log("deleteModuleById error:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
 // ================================ Lecture Controllers =========================================
 export const createLecture = async (req: Request, res: Response) => {
   try {
