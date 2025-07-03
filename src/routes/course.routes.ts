@@ -54,6 +54,6 @@ router.put("/lecture", validateUpdateLectureData(), updateLecture);
 router.delete("/lecture/:courseId/:moduleId/:lectureId", deleteLectureById);
 
 // To upload resources pdf
-router.post("/upload-rsource", handlUploadPdf);
+router.post("/upload-rsource", upload.single("pdf"), handlUploadPdf);
 
 export default router;

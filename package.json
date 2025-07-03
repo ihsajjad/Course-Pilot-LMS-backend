@@ -14,7 +14,6 @@
   "type": "commonjs",
   "description": "",
   "dependencies": {
-    "@types/multer": "^1.4.13",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.7.0",
     "cookie-parser": "^1.4.7",
@@ -32,6 +31,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.0.0",
     "@types/node": "^24.0.6",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"

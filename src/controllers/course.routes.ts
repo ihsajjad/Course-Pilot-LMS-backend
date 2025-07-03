@@ -450,7 +450,11 @@ export const handlUploadPdf = async (req: Request, res: Response) => {
 
     const pdfLink = await uploadPDF(file);
 
-    return res.json(pdfLink);
+    return res.json({
+      success: true,
+      message: "PDF uploaded successfully",
+      url: pdfLink,
+    });
   } catch (error: any) {
     console.log("handlUploadPdf error:", error);
     return res

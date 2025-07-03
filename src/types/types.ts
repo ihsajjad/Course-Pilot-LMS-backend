@@ -1,18 +1,9 @@
-import mongoose, { Document, ObjectId } from "mongoose";
-
-export type LectureProgressType = {
-  lectureId: string;
-  isCompleted: boolean;
-};
-
-export type CourseProgressType = {
-  courseId: string;
-  completedLectures: LectureProgressType[]; // per lecture tracking
-};
+import mongoose, { Document } from "mongoose";
 
 export type EnrolledCourseType = {
   courseId: string;
   enrolledAt: Date; // ISO date string
+  completedLectures: string[]; // per lecture tracking
 };
 
 export interface UserType extends Document {
@@ -23,12 +14,9 @@ export interface UserType extends Document {
   profile?: string; // Cloudinary URL or optional fallback
   role: "Admin" | "User";
   enrolledCourses: EnrolledCourseType[];
-  progress: CourseProgressType[];
   createdAt: string;
   updatedAt: string;
 }
-
-// types/lecture.ts
 
 export type LectureType = {
   _id: string;
