@@ -134,7 +134,34 @@ export const updateCourse = async (req: Request, res: Response) => {
   }
 };
 
+// To get course page
 export const getCourseById = async (req: Request, res: Response) => {
+  try {
+    const _id = req.params._id;
+    if (!_id) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Course id is required!" });
+    }
+
+    const course = await CourseModel.findById(_id).select("title description price thumbnail");
+    if (!course) {
+      return res
+        .status(404)
+        .json({ success: false, message: `Course doesn't exist for ${_id}` });
+    }
+
+    res.json(course);
+  } catch (error: any) {
+    console.log(__dirname, error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
+// To get course content
+export const getCourseContentById = async (req: Request, res: Response) => {
   try {
     const _id = req.params._id;
     if (!_id) {

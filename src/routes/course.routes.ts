@@ -7,6 +7,7 @@ import {
   deleteLectureById,
   deleteModuleById,
   getCourseById,
+  getCourseContentById,
   getCourses,
   handlUploadPdf,
   updateCourse,
@@ -40,7 +41,8 @@ router.put(
   updateCourse
 );
 
-router.get("/:_id", getCourseById);
+router.get("/:_id", getCourseById); // to get course page data
+router.get("/content/:_id", getCourseContentById); // to get course content
 router.delete("/:_id", deleteCourseById);
 
 // Module routes
