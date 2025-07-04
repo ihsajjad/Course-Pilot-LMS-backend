@@ -22,7 +22,7 @@ export const generateJWTToken = (user: UserType) => {
 const storage = multer.memoryStorage();
 export const upload = multer({
   storage,
-  limits: { fileSize: 1024 * 1024 },
+  limits: { fileSize: 2 * 1024 * 1024 },
 });
 
 // uploading single image to the cloudinary

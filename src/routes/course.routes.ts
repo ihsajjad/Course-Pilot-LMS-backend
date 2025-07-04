@@ -22,6 +22,7 @@ import {
   validateUpdateLectureData,
   validateUpdateModuleData,
 } from "../middlewares/validator.middleware";
+import { verifyToken } from "../middlewares/auth.middleware";
 
 const router = express.Router();
 
@@ -32,7 +33,7 @@ router.post(
   creteCourse
 );
 
-router.get("/", getCourses);
+router.get("/", verifyToken, getCourses); //getting all courses
 
 router.put(
   "/update",
