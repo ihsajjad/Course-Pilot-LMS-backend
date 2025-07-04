@@ -24,11 +24,7 @@ export const getCourseProgressById = async (req: Request, res: Response) => {
     const courseProgress =
       userData.enrolledCourses.find((item) => item.courseId === courseId) || {};
 
-    return res.json({
-      success: true,
-      message: "Course progress found",
-      courseProgress,
-    });
+    return res.json(courseProgress);
   } catch (error: any) {
     console.log("getCourseProgressById error:", error);
     return res
@@ -71,7 +67,7 @@ export const putCompletedLectureId = async (req: Request, res: Response) => {
         success: false,
         message: "Failed to add lecture Id!",
       });
-    }
+      }
 
     return res.json({
       success: true,

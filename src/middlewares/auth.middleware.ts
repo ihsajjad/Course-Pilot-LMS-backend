@@ -10,6 +10,8 @@ declare global {
     }
   }
 }
+
+// to verify jwt token from cookie
 export const verifyToken = async (
   req: Request,
   res: Response,
@@ -44,4 +46,17 @@ export const verifyToken = async (
     console.log(__filename, error);
     res.status(500).json({ message: "Internal server error" });
   }
+};
+
+
+// To verify admin or not
+export const verifyAdmin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const isAdmin = req.user.role === "Admin";
+  if (!isAdmin) return res.status(401).json({ message: "Unauthorized access" });
+
+  next();
 };

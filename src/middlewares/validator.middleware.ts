@@ -1,3 +1,8 @@
+
+
+
+/* ================= This file will content all express validator middlewares =================== */ 
+
 import { check } from "express-validator";
 
 export const validateRegisterData = () => {
