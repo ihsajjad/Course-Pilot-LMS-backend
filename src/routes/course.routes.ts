@@ -6,6 +6,7 @@ import {
   deleteCourseById,
   deleteLectureById,
   deleteModuleById,
+  enrollCourse,
   getCourseById,
   getCourseContentById,
   getCourses,
@@ -13,7 +14,7 @@ import {
   updateCourse,
   updateLecture,
   updateModule,
-} from "../controllers/course.routes";
+} from "../controllers/course.controllers";
 import { upload } from "../lib/utils";
 import {
   validateCourseData,
@@ -33,7 +34,7 @@ router.post(
   creteCourse
 );
 
-router.get("/", verifyToken, getCourses); //getting all courses
+router.get("/", getCourses); //getting all courses
 
 router.put(
   "/update",
@@ -58,5 +59,7 @@ router.delete("/lecture/:courseId/:moduleId/:lectureId", deleteLectureById);
 
 // To upload resources pdf
 router.post("/upload-rsource", upload.single("pdf"), handlUploadPdf);
+
+router.post("/enroll", verifyToken, enrollCourse);
 
 export default router;

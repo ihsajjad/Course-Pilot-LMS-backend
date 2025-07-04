@@ -1,20 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload, VerifyErrors } from "jsonwebtoken";
 import UserModel from "../models/user.schema";
-
-interface JWTUser {
-  email: string;
-  role: "User" | "Admin";
-  name: string;
-  profile: string;
-  enrolledCourses: string[];
-  _id: string;
-}
+import { CurrentUser } from "../types/types";
 
 declare global {
   namespace Express {
     interface Request {
-      user: JWTUser;
+      user: CurrentUser;
     }
   }
 }
@@ -36,7 +28,7 @@ export const verifyToken = async (
         if (error)
           return res.status(401).json({ message: "Unauthorized access" });
 
-        const jwtUser = decoded as JWTUser;
+        const jwtUser = decoded as CurrentUser;
 
         const user = await UserModel.findById(jwtUser._id);
         if (!user)

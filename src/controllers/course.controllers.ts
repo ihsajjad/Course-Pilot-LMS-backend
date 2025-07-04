@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import mongoose, { SortOrder } from "mongoose";
-import { uploadImage, uploadPDF } from "../lib/utils";
+import { generateJWTToken, uploadImage, uploadPDF } from "../lib/utils";
 import CourseModel from "../models/course.model";
-import { CourseType } from "../types/types";
+import UserModel from "../models/user.schema";
+import { CourseType, EnrolledCourseType } from "../types/types";
 
 export const creteCourse = async (req: Request, res: Response) => {
   try {
@@ -144,7 +145,9 @@ export const getCourseById = async (req: Request, res: Response) => {
         .json({ success: false, message: "Course id is required!" });
     }
 
-    const course = await CourseModel.findById(_id).select("title description price thumbnail");
+    const course = await CourseModel.findById(_id).select(
+      "title description price thumbnail"
+    );
     if (!course) {
       return res
         .status(404)
@@ -484,6 +487,60 @@ export const handlUploadPdf = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     console.log("handlUploadPdf error:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const enrollCourse = async (req: Request, res: Response) => {
+  try {
+    const { courseId } = req.body as { courseId: string };
+
+    if (!courseId) {
+      return res.json({
+        success: false,
+        message: "CourseId is required!",
+      });
+    }
+    const jwtUser = req.user;
+
+    const enrolledCourse: EnrolledCourseType = {
+      courseId,
+      completedLectures: [],
+      enrolledAt: new Date(),
+    };
+
+    const response = await UserModel.findOneAndUpdate(
+      { _id: jwtUser._id },
+      { $push: { enrolledCourses: enrolledCourse } },
+      { new: true }
+    );
+    if (!response) {
+      return res.json({
+        success: false,
+        message: "Failed to enroll courese!",
+      });
+    }
+    req.user.enrolledCourseIds.push(courseId);
+
+    // built-in utils function to generate token
+    const token = generateJWTToken(response);
+
+    // setting token to the browser cookie for authentication
+    res.cookie("auth_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 86400000,
+    });
+
+    return res.json({
+      success: true,
+      message: "Course enrolled successfully",
+      user: jwtUser,
+    });
+  } catch (error: any) {
+    console.log("enrollCourse error:", error);
     return res
       .status(500)
       .json({ success: false, message: "Internal server error" });

@@ -6,7 +6,7 @@ import { UserType } from "../types/types";
 export const generateJWTToken = (user: UserType) => {
   const { email, role, name, profile, enrolledCourses, _id } = user;
 
-  const enrolledCourseIds = enrolledCourses.map((item) => item.courseId);
+  const enrolledCourseIds = enrolledCourses.map((item) => item.courseId) || [];
 
   const token = jwt.sign(
     { email, role, name, profile, enrolledCourseIds, _id },

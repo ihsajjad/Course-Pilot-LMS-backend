@@ -18,6 +18,15 @@ export interface UserType extends Document {
   updatedAt: string;
 }
 
+export interface CurrentUser {
+  email: string;
+  role: "User" | "Admin" | "";
+  name: string;
+  profile: string;
+  enrolledCourseIds: string[];
+  _id: string;
+}
+
 export type LectureType = {
   _id: string;
   title: string;

@@ -1,10 +1,10 @@
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
+import jwt from "jsonwebtoken";
 import { generateJWTToken, uploadImage } from "../lib/utils";
 import UserModel from "../models/user.schema";
-import { UserType } from "../types/types";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import { CurrentUser, UserType } from "../types/types";
 
 export const handleRegister = async (req: Request, res: Response) => {
   try {
@@ -74,7 +74,7 @@ export const handleLogin = async (req: Request, res: Response) => {
     }
 
     const user = await UserModel.findOne({ email: loginData.email });
-    if (!user) return res.status(400).json({ message: "User doesn't exist" });
+    if (!user) return res.json({ message: "User doesn't exist" });
 
     const isMatchedPassword = await bcrypt.compare(
       loginData.password,
@@ -82,9 +82,7 @@ export const handleLogin = async (req: Request, res: Response) => {
     );
 
     if (!isMatchedPassword)
-      return res
-        .status(400)
-        .json({ success: false, message: "Password doesn't match!" });
+      return res.json({ success: false, message: "Password doesn't match!" });
 
     // built-in utils function to generate token
     const token = generateJWTToken(user);
@@ -124,12 +122,13 @@ export const logoutUser = async (req: Request, res: Response) => {
 // get current user (To observe the logged user)
 export const currentUser = async (req: Request, res: Response) => {
   try {
-    let userData = {
+    // initializing user data
+    let userData: CurrentUser = {
       email: "",
       name: "",
       role: "",
       profile: "",
-      enrolledCourses: [],
+      enrolledCourseIds: [],
       _id: "",
     };
 
@@ -139,13 +138,15 @@ export const currentUser = async (req: Request, res: Response) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY as string);
 
+    const { _id, name, email, role, profile, enrolledCourseIds } =
+      decoded as CurrentUser;
     if (decoded) {
-      userData.name = await (decoded as JwtPayload).name;
-      userData.email = await (decoded as JwtPayload).email;
-      userData.role = await (decoded as JwtPayload).role;
-      userData.profile = (await (decoded as JwtPayload).profile) || "";
-      userData.enrolledCourses = await (decoded as JwtPayload).enrolledCourses;
-      userData._id = await (decoded as JwtPayload)._id;
+      userData.name = name;
+      userData.email = email;
+      userData.role = role;
+      userData.profile = profile || "";
+      userData.enrolledCourseIds = enrolledCourseIds;
+      userData._id = _id;
     }
 
     res.json(userData);
