@@ -4,15 +4,16 @@
  * Project Name : Course Pilot LMS
  * Author: MD Iftekher Hossen Sajjad
  * Date: 28/6/2025
+ * Cmergency Contact: ihsajjad1@gmail.com, 01725790334 (Whatsapp)
  */
 
+import { v2 as cloudinary } from "cloudinary";
+import cookieParser from "cookie-parser";
 import cors from "cors";
+import dotenv from "dotenv";
 import express, { Request, Response } from "express";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 const app = express();
-import cookieParser from "cookie-parser";
-import { v2 as cloudinary } from "cloudinary";
 
 /* ROUTE IMPORTS */
 import authRoutes from "./routes/auth.routes";
@@ -23,7 +24,7 @@ import userRoutes from "./routes/user.routes";
 dotenv.config();
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors({ origin: ["http://localhost:3000"], credentials: true }));
+app.use(cors({ origin: process.env.BASE_CLIENT, credentials: true }));
 app.use(express.json());
 
 /* MONGOOSE CONNECTION */
