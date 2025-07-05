@@ -1,9 +1,23 @@
-
 # 📚 Course Pilot LMS - Backend
 
 > ⚠️ This project was developed as part of an assignment task.
 
 A Node.js + TypeScript-based backend server for a Learning Management System (LMS) called **Course Pilot**. Built following the **MVC architecture** and powered by **Express**, **MongoDB**, and **Cloudinary** for file uploads.
+
+---
+
+## 🌐 Live API & Documentation
+
+- **📡 API Base URL**: [`https://course-pilot-backend.vercel.app`](https://course-pilot-backend.vercel.app)
+- **📖 Swagger Docs**: [`https://course-pilot-backend.vercel.app/docs`](https://course-pilot-backend.vercel.app/docs)
+
+> The API documentation is built using `swagger-jsdoc` and served with `swagger-ui-express`.
+
+### 📸 Swagger Screenshot
+
+![Swagger Screenshot](./src/assets/api.png)
+
+> Replace this screenshot path with your actual image location.
 
 ---
 
@@ -43,11 +57,11 @@ A Node.js + TypeScript-based backend server for a Learning Management System (LM
 
 ## 🔧 Scripts
 
-| Script             | Description                            |
-|--------------------|----------------------------------------|
-| `npm run dev`      | Start dev server using nodemon         |
-| `npm run build`    | Compile TypeScript to JavaScript       |
-| `npm run start`    | Start the server from `dist`           |
+| Script          | Description                      |
+| --------------- | -------------------------------- |
+| `npm run dev`   | Start dev server using nodemon   |
+| `npm run build` | Compile TypeScript to JavaScript |
+| `npm run start` | Start the server from `dist`     |
 
 ---
 
@@ -57,6 +71,7 @@ A Node.js + TypeScript-based backend server for a Learning Management System (LM
 - The `vercel.json` routes all requests to `src/index.ts`.
 
 ### ✅ Vercel Build Settings:
+
 - **Build Command:** (Leave empty)
 - **Output Directory:** (Leave empty)
 - **Framework Preset:** Other

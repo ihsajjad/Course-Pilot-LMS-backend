@@ -1,19 +1,12 @@
 import express from "express";
 import {
-  createLecture,
-  createModule,
   creteCourse,
   deleteCourseById,
-  deleteLectureById,
-  deleteModuleById,
   enrollCourse,
   getCourseById,
   getCourseContentById,
   getCourses,
-  handlUploadPdf,
   updateCourse,
-  updateLecture,
-  updateModule,
 } from "../controllers/course.controllers";
 import { upload } from "../lib/utils";
 import {
@@ -24,6 +17,17 @@ import {
   validateUpdateModuleData,
 } from "../middlewares/validator.middleware";
 import { verifyAdmin, verifyToken } from "../middlewares/auth.middleware";
+import {
+  createLecture,
+  deleteLectureById,
+  handlUploadPdf,
+  updateLecture,
+} from "../controllers/lecture.controllers";
+import {
+  createModule,
+  deleteModuleById,
+  updateModule,
+} from "../controllers/module.controllers";
 
 const router = express.Router();
 
@@ -50,9 +54,10 @@ router.put(
   updateCourse
 );
 
+router.delete("/:_id", verifyToken, verifyAdmin, deleteCourseById);
+
 router.get("/:_id", getCourseById); // To get course page data
 router.get("/content/:_id", getCourseContentById); // To get course content
-router.delete("/:_id", verifyToken, verifyAdmin, deleteCourseById);
 
 // To create new module
 router.post(

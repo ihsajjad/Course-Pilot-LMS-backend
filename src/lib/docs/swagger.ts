@@ -11,6 +11,7 @@ import swaggerJsdoc from "swagger-jsdoc";
 import { version } from "../../../package.json";
 import swaggerUi from "swagger-ui-express";
 import authDocs from "./auth.docs";
+import coursesDocs from "./courses.docs";
 
 const options: swaggerJsdoc.Options = {
   definition: {
@@ -200,7 +201,7 @@ const options: swaggerJsdoc.Options = {
       },
     },
     security: [{ cookieAuth: [] }],
-    paths: {...authDocs},
+    paths: {...authDocs, ...coursesDocs},
   },
   apis: ["../routes/*.ts", "../models/*.ts"],
 };
