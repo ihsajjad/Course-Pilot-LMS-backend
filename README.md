@@ -17,8 +17,6 @@ A Node.js + TypeScript-based backend server for a Learning Management System (LM
 
 ![Swagger Screenshot](./src/assets/api.png)
 
-> Replace this screenshot path with your actual image location.
-
 ---
 
 ## 🚀 Tech Stack
