@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload, VerifyErrors } from "jsonwebtoken";
-import UserModel from "../models/user.schema";
+import UserModel from "../models/user.model";
 import { CurrentUser } from "../types/types";
 
 declare global {

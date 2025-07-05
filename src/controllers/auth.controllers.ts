@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 import { generateJWTToken, uploadImage } from "../lib/utils";
-import UserModel from "../models/user.schema";
+import UserModel from "../models/user.model";
 import { CurrentUser, UserType } from "../types/types";
 
 export const handleRegister = async (req: Request, res: Response) => {

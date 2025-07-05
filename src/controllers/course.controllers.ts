@@ -3,7 +3,7 @@ import { validationResult } from "express-validator";
 import mongoose, { SortOrder } from "mongoose";
 import { generateJWTToken, uploadImage, uploadPDF } from "../lib/utils";
 import CourseModel from "../models/course.model";
-import UserModel from "../models/user.schema";
+import UserModel from "../models/user.model";
 import { CourseType, EnrolledCourseType } from "../types/types";
 
 export const creteCourse = async (req: Request, res: Response) => {

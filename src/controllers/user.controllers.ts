@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import CourseModel from "../models/course.model";
-import UserModel from "../models/user.schema";
+import UserModel from "../models/user.model";
 
 export const getCourseProgressById = async (req: Request, res: Response) => {
   try {
