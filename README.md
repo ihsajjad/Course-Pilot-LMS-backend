@@ -11,7 +11,7 @@ A Node.js + TypeScript-based backend server for a Learning Management System (LM
 - **📡 API Base URL**: [`https://course-pilot-backend.vercel.app`](https://course-pilot-backend.vercel.app)
 - **📖 Swagger Docs**: [`https://course-pilot-backend.vercel.app/docs`](https://course-pilot-backend.vercel.app/docs)
 
-> The API documentation is built using `swagger-jsdoc` and served with `swagger-ui-express`.
+> /docs might not work on production. Because vercel doesn't allow it, it has to be configured. You can try on localhost.
 
 ### 📸 Swagger Screenshot
 
