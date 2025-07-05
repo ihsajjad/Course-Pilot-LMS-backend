@@ -62,7 +62,7 @@ export const getCourses = async (req: Request, res: Response) => {
 
     const total = await CourseModel.countDocuments(query);
 
-    const cardSize = 9;
+    const cardSize = 6;
     let pageNumber = parseInt(req.query.page ? req.query.page.toString() : "1");
 
     // if courses less than 5 then the page number should be 1

@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import CourseModel from "../models/course.model";
 import UserModel from "../models/user.schema";
 
 export const getCourseProgressById = async (req: Request, res: Response) => {
@@ -67,7 +68,7 @@ export const putCompletedLectureId = async (req: Request, res: Response) => {
         success: false,
         message: "Failed to add lecture Id!",
       });
-      }
+    }
 
     return res.json({
       success: true,
@@ -78,5 +79,29 @@ export const putCompletedLectureId = async (req: Request, res: Response) => {
     return res
       .status(500)
       .json({ success: false, message: "Internal server error" });
+  }
+};
+
+// To get user's enrolled courses
+export const getMyCoursesByIds = async (req: Request, res: Response) => {
+  try {
+    const { courseIds } = req.body as { courseIds: string[] };
+
+    if (!courseIds || !Array.isArray(courseIds)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid courseIds array" });
+    }
+
+    const jwtUser = req.user;
+
+    const courses = await CourseModel.find({
+      _id: { $in: jwtUser.enrolledCourseIds },
+    });
+
+    res.json(courses);
+  } catch (error) {
+    console.error("getMyCoursesByIds error:", error);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
