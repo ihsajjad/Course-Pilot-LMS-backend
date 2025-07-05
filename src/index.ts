@@ -19,6 +19,7 @@ const app = express();
 import authRoutes from "./routes/auth.routes";
 import courseRoutes from "./routes/course.routes";
 import userRoutes from "./routes/user.routes";
+import swaggerDocs from "./lib/docs/swagger";
 
 /* CONFIGURATIONS */
 dotenv.config();
@@ -46,6 +47,9 @@ cloudinary.config({
 app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/user", userRoutes);
+
+// swagger docs function
+swaggerDocs(app);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Server is running...");

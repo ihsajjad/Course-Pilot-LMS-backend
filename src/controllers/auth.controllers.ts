@@ -124,12 +124,12 @@ export const currentUser = async (req: Request, res: Response) => {
   try {
     // initializing user data
     let userData: CurrentUser = {
+      _id: "",
       email: "",
       name: "",
       role: "",
       profile: "",
       enrolledCourseIds: [],
-      _id: "",
     };
 
     // remove the token from client's browser
